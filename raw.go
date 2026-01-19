@@ -42,16 +42,16 @@ func (t *table[raw]) MustSetRaw(v float64, symbols []symbol) {
 
 func (t *table[raw]) ToProb() *table[prob] {
 	pt := NewProbTable(t.n, t.base, t.total)
-	for i, v := range t.data {
-		pt.data[i] = prob(float64(v) / t.total)
+	for i, v := range t.freqs {
+		pt.freqs[i] = prob(float64(v) / t.total)
 	}
 	return pt
 }
 
 func (t *table[raw]) ToLogProb() *table[logProb] {
 	lpt := NewLogProbTable(t.n, t.base, t.total)
-	for i, v := range t.data {
-		lpt.data[i] = logProb(math.Log(float64(v)) - math.Log(t.total))
+	for i, v := range t.freqs {
+		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(t.total))
 	}
 	return lpt
 }

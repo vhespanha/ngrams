@@ -4,25 +4,25 @@ import (
 	"fmt"
 )
 
-type data interface {
+type freq interface {
 	raw | prob | logProb
 }
 
-type table[T data] struct {
+type table[T freq] struct {
 	n     int
-	data  []T
+	freqs []T
 	base  int
 	total float64
 }
 
-func newTable[T data](n, base int, total float64) *table[T] {
+func newTable[T freq](n, base int, total float64) *table[T] {
 	size := 1
 	for i := 0; i < n; i++ {
 		size *= base
 	}
 	return &table[T]{
 		n:     n,
-		data:  make([]T, size),
+		freqs: make([]T, size),
 		base:  base,
 		total: total,
 	}
@@ -41,14 +41,14 @@ func (t *table[T]) At(symbols ...symbol) (*T, error) {
 		return nil, fmt.Errorf("expected %d symbols, got %d",
 			t.n, len(symbols))
 	}
-	return &t.data[t.idx(symbols)], nil
+	return &t.freqs[t.idx(symbols)], nil
 }
 
 func (t *table[T]) MustAt(symbols ...symbol) *T {
 	if len(symbols) != t.n {
 		panic("wrong arity for ngram")
 	}
-	return &t.data[t.idx(symbols)]
+	return &t.freqs[t.idx(symbols)]
 }
 
 func (t *table[T]) set(v T, symbols []symbol) error {
