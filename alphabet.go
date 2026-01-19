@@ -51,6 +51,7 @@ func (a *Alphabet) SymbolFromByte(b byte) (symbol, bool) {
 	}
 	return symbol(idx), true
 }
+
 func (a *Alphabet) SymbolsFromString(s string) ([]symbol, error) {
 	n := len(s)
 	symbols := make([]symbol, n)
