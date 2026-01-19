@@ -22,8 +22,8 @@ func (r raw) validate() error {
 	return nil
 }
 
-func NewRawTable(n, base int, total float64) *table[raw] {
-	return newTable[raw](n, base, total)
+func NewRawTable(n int, total float64, alphabet *Alphabet) *table[raw] {
+	return newTable[raw](n, total, alphabet)
 }
 
 func (t *table[raw]) SetRaw(v float64, symbols ...symbol) error {
@@ -41,7 +41,7 @@ func (t *table[raw]) MustSetRaw(v float64, symbols []symbol) {
 }
 
 func (t *table[raw]) ToProb() *table[prob] {
-	pt := NewProbTable(t.n, t.base, t.total)
+	pt := NewProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
 		pt.freqs[i] = prob(float64(v) / t.total)
 	}
@@ -49,7 +49,7 @@ func (t *table[raw]) ToProb() *table[prob] {
 }
 
 func (t *table[raw]) ToLogProb() *table[logProb] {
-	lpt := NewLogProbTable(t.n, t.base, t.total)
+	lpt := NewLogProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
 		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(t.total))
 	}

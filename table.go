@@ -9,29 +9,26 @@ type freq interface {
 }
 
 type table[T freq] struct {
-	n     int
-	freqs []T
-	base  int
-	total float64
+	n        int
+	freqs    []T
+	total    float64
+	alphabet *Alphabet
 }
 
-func newTable[T freq](n, base int, total float64) *table[T] {
+func newTable[T freq](n int, total float64, alphabet *Alphabet) *table[T] {
 	size := 1
-	for i := 0; i < n; i++ {
-		size *= base
-	}
 	return &table[T]{
-		n:     n,
-		freqs: make([]T, size),
-		base:  base,
-		total: total,
+		n:        n,
+		freqs:    make([]T, size),
+		alphabet: alphabet,
+		total:    total,
 	}
 }
 
 func (t *table[T]) idx(symbols []symbol) int {
 	idx := 0
 	for _, s := range symbols {
-		idx = idx*t.base + int(s)
+		idx = idx*t.alphabet.size + int(s)
 	}
 	return idx
 }

@@ -21,8 +21,8 @@ func (l logProb) validate() error {
 	return nil
 }
 
-func NewLogProbTable(n, base int, total float64) *table[logProb] {
-	return newTable[logProb](n, base, total)
+func NewLogProbTable(n int, total float64, alphabet *Alphabet) *table[logProb] {
+	return newTable[logProb](n, total, alphabet)
 }
 
 func (t *table[logProb]) SetLogProb(v float64, symbols ...symbol) error {

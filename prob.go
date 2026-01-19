@@ -18,8 +18,8 @@ func (p prob) validate() error {
 	return nil
 }
 
-func NewProbTable(n, base int, total float64) *table[prob] {
-	return newTable[prob](n, base, total)
+func NewProbTable(n int, total float64, alphabet *Alphabet) *table[prob] {
+	return newTable[prob](n, total, alphabet)
 }
 
 func (t *table[prob]) SetProb(v float64, symbols ...symbol) error {
