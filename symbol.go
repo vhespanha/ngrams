@@ -12,6 +12,9 @@ func SymbolFromByte(b byte) (symbol, bool) {
 }
 
 func SymbolsFromString(s string, n int) ([]symbol, error) {
+	if n != len(s) {
+		return nil, fmt.Errorf("expected %d symbols, got %d", n, len(s))
+	}
 	symbols := make([]symbol, len(s))
 	for i := 0; i < n; i++ {
 		symbol, ok := SymbolFromByte(s[i])
