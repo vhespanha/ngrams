@@ -5,21 +5,21 @@ import (
 	"math"
 )
 
-func isNotPositive[T ~float64](v T) bool {
-	f := float64(v)
-	return !math.IsNaN(f) && f <= 0
-}
+// func isNotPositive[T ~float64](v T) bool {
+// 	f := float64(v)
+// 	return !math.IsNaN(f) && f <= 0
+// }
 
 type logProb float64
 
-var errNotLogProb = "type %T should not be positive"
+// var errNotLogProb = "type %T should not be positive"
 
-func (l logProb) validate() error {
-	if !isNotPositive(l) {
-		return fmt.Errorf(errNotLogProb, l)
-	}
-	return nil
-}
+// func (l logProb) validate() error {
+// 	if !isNotPositive(l) {
+// 		return fmt.Errorf(errNotLogProb, l)
+// 	}
+// 	return nil
+// }
 
 func NewLogProbTable(n int, total float64, alphabet *Alphabet) *Table[logProb] {
 	return newTable[logProb](n, total, alphabet)

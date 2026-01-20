@@ -17,12 +17,12 @@ var (
 	panicNotWhole = "not a whole number"
 )
 
-func (r raw) validate() error {
-	if !isWhole(r) {
-		return fmt.Errorf(errNotWhole, r)
-	}
-	return nil
-}
+// func (r raw) validate() error {
+// 	if !isWhole(r) {
+// 		return fmt.Errorf(errNotWhole, r)
+// 	}
+// 	return nil
+// }
 
 func NewRawTable(n int, total float64, alphabet *Alphabet) *Table[raw] {
 	return newTable[raw](n, total, alphabet)
