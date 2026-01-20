@@ -35,7 +35,7 @@ func (t *Table[raw]) SetRaw(v float64, symbols ...symbol) error {
 	return t.set(raw(v), symbols)
 }
 
-func (t *Table[raw]) MustSetRaw(v float64, symbols []symbol) {
+func (t *Table[raw]) MustSetRaw(v float64, symbols ...symbol) {
 	if !isWhole(v) {
 		panic(panicNotWhole)
 	}

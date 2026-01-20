@@ -29,7 +29,7 @@ func (t *Table[prob]) SetProb(v float64, symbols ...symbol) error {
 	return t.set(prob(v/t.total), symbols)
 }
 
-func (t *Table[prob]) MustSetProb(v float64, symbols []symbol) {
+func (t *Table[prob]) MustSetProb(v float64, symbols ...symbol) {
 	if !isWhole(v) {
 		panic(panicNotWhole)
 	}
