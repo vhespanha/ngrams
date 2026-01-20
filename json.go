@@ -5,7 +5,7 @@ import "encoding/json"
 type auxTable[T freq] struct {
 	N        int       `json:"n"`
 	Freqs    []T       `json:"freqs"`
-	Total    float64   `json:"total"`
+	Total    uint64    `json:"total"`
 	Alphabet *Alphabet `json:"alphabet"`
 }
 

@@ -1,59 +1,33 @@
 package ngrams
 
 import (
-	"fmt"
 	"math"
 )
 
-func isWhole[T ~float64](v T) bool {
-	f := float64(v)
-	return f >= 0 && !math.IsInf(f, 0) && !math.IsNaN(f) && f == math.Trunc(f)
+func NewRawTable(n int, total uint64, alphabet *Alphabet) *Table[uint64] {
+	return newTable[uint64](n, total, alphabet)
 }
 
-type raw float64
-
-var (
-	errNotWhole   = "type %T should be a whole number"
-	panicNotWhole = "not a whole number"
-)
-
-// func (r raw) validate() error {
-// 	if !isWhole(r) {
-// 		return fmt.Errorf(errNotWhole, r)
-// 	}
-// 	return nil
-// }
-
-func NewRawTable(n int, total float64, alphabet *Alphabet) *Table[raw] {
-	return newTable[raw](n, total, alphabet)
+func (t *Table[uint64]) SetRaw(v uint64, symbols ...symbol) error {
+	return t.set(v, symbols)
 }
 
-func (t *Table[raw]) SetRaw(v float64, symbols ...symbol) error {
-	if !isWhole(v) {
-		return fmt.Errorf(errNotWhole, v)
-	}
-	return t.set(raw(v), symbols)
+func (t *Table[uint64]) MustSetRaw(v uint64, symbols ...symbol) {
+	t.mustSet(v, symbols)
 }
 
-func (t *Table[raw]) MustSetRaw(v float64, symbols ...symbol) {
-	if !isWhole(v) {
-		panic(panicNotWhole)
-	}
-	t.mustSet(raw(v), symbols)
-}
-
-func (t *Table[raw]) ToProb() *Table[prob] {
+func (t *Table[uint64]) ToProb() *Table[prob] {
 	pt := NewProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
-		pt.freqs[i] = prob(float64(v) / t.total)
+		pt.freqs[i] = prob(float64(v) / float64(t.total))
 	}
 	return pt
 }
 
-func (t *Table[raw]) ToLogProb() *Table[logProb] {
+func (t *Table[uint64]) ToLogProb() *Table[logProb] {
 	lpt := NewLogProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
-		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(t.total))
+		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(float64(t.total)))
 	}
 	return lpt
 }

@@ -5,17 +5,17 @@ import (
 )
 
 type freq interface {
-	raw | prob | logProb
+	uint64 | prob | logProb
 }
 
 type Table[T freq] struct {
 	n        int
 	freqs    []T
-	total    float64
+	total    uint64
 	alphabet *Alphabet
 }
 
-func newTable[T freq](n int, total float64, alphabet *Alphabet) *Table[T] {
+func newTable[T freq](n int, total uint64, alphabet *Alphabet) *Table[T] {
 	return &Table[T]{
 		n:        n,
 		freqs:    make([]T, 1),

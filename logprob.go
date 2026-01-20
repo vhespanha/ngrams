@@ -1,7 +1,6 @@
 package ngrams
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -21,20 +20,14 @@ type logProb float64
 // 	return nil
 // }
 
-func NewLogProbTable(n int, total float64, alphabet *Alphabet) *Table[logProb] {
+func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *Table[logProb] {
 	return newTable[logProb](n, total, alphabet)
 }
 
-func (t *Table[logProb]) SetLogProb(v float64, symbols ...symbol) error {
-	if !isWhole(v) {
-		return fmt.Errorf(errNotWhole, v)
-	}
-	return t.set(logProb(math.Log(v)-math.Log(t.total)), symbols)
+func (t *Table[logProb]) SetLogProb(v uint64, symbols ...symbol) error {
+	return t.set(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
 }
 
-func (t *Table[logProb]) MustSetLogProb(v float64, symbols ...symbol) {
-	if !isWhole(v) {
-		panic(panicNotWhole)
-	}
-	t.mustSet(logProb(math.Log(v)-math.Log(t.total)), symbols)
+func (t *Table[logProb]) MustSetLogProb(v uint64, symbols ...symbol) {
+	t.mustSet(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
 }

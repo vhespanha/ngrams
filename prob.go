@@ -1,7 +1,5 @@
 package ngrams
 
-import "fmt"
-
 // func isFactor[T ~float64](v T) bool {
 // 	f := float64(v)
 // 	return f >= 0 && f <= 1
@@ -18,20 +16,14 @@ type prob float64
 // 	return nil
 // }
 
-func NewProbTable(n int, total float64, alphabet *Alphabet) *Table[prob] {
+func NewProbTable(n int, total uint64, alphabet *Alphabet) *Table[prob] {
 	return newTable[prob](n, total, alphabet)
 }
 
-func (t *Table[prob]) SetProb(v float64, symbols ...symbol) error {
-	if !isWhole(v) {
-		return fmt.Errorf(errNotWhole, v)
-	}
+func (t *Table[prob]) SetProb(v uint64, symbols ...symbol) error {
 	return t.set(prob(v/t.total), symbols)
 }
 
-func (t *Table[prob]) MustSetProb(v float64, symbols ...symbol) {
-	if !isWhole(v) {
-		panic(panicNotWhole)
-	}
+func (t *Table[prob]) MustSetProb(v uint64, symbols ...symbol) {
 	t.mustSet(prob(v/t.total), symbols)
 }
