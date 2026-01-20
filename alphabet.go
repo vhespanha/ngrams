@@ -13,7 +13,8 @@ type symbol int8
 
 type Alphabet struct {
 	size   int
-	decode [256]symbol
+	spec   string
+	decode [256]int8
 	encode []byte
 }
 
@@ -23,6 +24,7 @@ func newAlphabet(spec string) *Alphabet {
 	a := &Alphabet{
 		size:   len(specChars),
 		encode: make([]byte, len(specChars)),
+		spec:   spec,
 	}
 
 	var dec [256]int8
@@ -35,6 +37,8 @@ func newAlphabet(spec string) *Alphabet {
 		a.encode[i] = b
 		dec[b] = int8(i)
 	}
+
+	a.decode = dec
 
 	return a
 }
