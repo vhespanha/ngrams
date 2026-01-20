@@ -16,10 +16,9 @@ type Table[T freq] struct {
 }
 
 func newTable[T freq](n int, total float64, alphabet *Alphabet) *Table[T] {
-	size := 1
 	return &Table[T]{
 		n:        n,
-		freqs:    make([]T, size),
+		freqs:    make([]T, 1),
 		alphabet: alphabet,
 		total:    total,
 	}
