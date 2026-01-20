@@ -21,18 +21,18 @@ func (l logProb) validate() error {
 	return nil
 }
 
-func NewLogProbTable(n int, total float64, alphabet *Alphabet) *table[logProb] {
+func NewLogProbTable(n int, total float64, alphabet *Alphabet) *Table[logProb] {
 	return newTable[logProb](n, total, alphabet)
 }
 
-func (t *table[logProb]) SetLogProb(v float64, symbols ...symbol) error {
+func (t *Table[logProb]) SetLogProb(v float64, symbols ...symbol) error {
 	if !isWhole(v) {
 		return fmt.Errorf(errNotWhole, v)
 	}
 	return t.set(logProb(math.Log(v)-math.Log(t.total)), symbols)
 }
 
-func (t *table[logProb]) MustSetLogProb(v float64, symbols ...symbol) {
+func (t *Table[logProb]) MustSetLogProb(v float64, symbols ...symbol) {
 	if !isWhole(v) {
 		panic(panicNotWhole)
 	}

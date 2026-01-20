@@ -22,25 +22,25 @@ func (r raw) validate() error {
 	return nil
 }
 
-func NewRawTable(n int, total float64, alphabet *Alphabet) *table[raw] {
+func NewRawTable(n int, total float64, alphabet *Alphabet) *Table[raw] {
 	return newTable[raw](n, total, alphabet)
 }
 
-func (t *table[raw]) SetRaw(v float64, symbols ...symbol) error {
+func (t *Table[raw]) SetRaw(v float64, symbols ...symbol) error {
 	if !isWhole(v) {
 		return fmt.Errorf(errNotWhole, v)
 	}
 	return t.set(raw(v), symbols)
 }
 
-func (t *table[raw]) MustSetRaw(v float64, symbols []symbol) {
+func (t *Table[raw]) MustSetRaw(v float64, symbols []symbol) {
 	if !isWhole(v) {
 		panic(panicNotWhole)
 	}
 	t.mustSet(raw(v), symbols)
 }
 
-func (t *table[raw]) ToProb() *table[prob] {
+func (t *Table[raw]) ToProb() *Table[prob] {
 	pt := NewProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
 		pt.freqs[i] = prob(float64(v) / t.total)
@@ -48,7 +48,7 @@ func (t *table[raw]) ToProb() *table[prob] {
 	return pt
 }
 
-func (t *table[raw]) ToLogProb() *table[logProb] {
+func (t *Table[raw]) ToLogProb() *Table[logProb] {
 	lpt := NewLogProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
 		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(t.total))

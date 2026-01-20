@@ -18,18 +18,18 @@ func (p prob) validate() error {
 	return nil
 }
 
-func NewProbTable(n int, total float64, alphabet *Alphabet) *table[prob] {
+func NewProbTable(n int, total float64, alphabet *Alphabet) *Table[prob] {
 	return newTable[prob](n, total, alphabet)
 }
 
-func (t *table[prob]) SetProb(v float64, symbols ...symbol) error {
+func (t *Table[prob]) SetProb(v float64, symbols ...symbol) error {
 	if !isWhole(v) {
 		return fmt.Errorf(errNotWhole, v)
 	}
 	return t.set(prob(v/t.total), symbols)
 }
 
-func (t *table[prob]) MustSetProb(v float64, symbols []symbol) {
+func (t *Table[prob]) MustSetProb(v float64, symbols []symbol) {
 	if !isWhole(v) {
 		panic(panicNotWhole)
 	}
