@@ -2,6 +2,7 @@
 
 format:
 	@go tool goimports -w .
+	@go tool gofumpt -l -w -extra .
 
 check: format
 	@go vet

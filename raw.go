@@ -12,8 +12,10 @@ func isWhole[T ~float64](v T) bool {
 
 type raw float64
 
-var errNotWhole = "type %T should be a whole number"
-var panicNotWhole = "not a whole number"
+var (
+	errNotWhole   = "type %T should be a whole number"
+	panicNotWhole = "not a whole number"
+)
 
 func (r raw) validate() error {
 	if !isWhole(r) {
