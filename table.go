@@ -5,7 +5,7 @@ import (
 )
 
 type freq interface {
-	uint64 | prob | logProb
+	uint64 | prob | logprob
 }
 
 type Table[T freq] struct {

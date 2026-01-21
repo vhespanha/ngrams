@@ -9,7 +9,7 @@ import (
 // 	return !math.IsNaN(f) && f <= 0
 // }
 
-type logProb float64
+type logprob float64
 
 // var errNotLogProb = "type %T should not be positive"
 
@@ -20,8 +20,8 @@ type logProb float64
 // 	return nil
 // }
 
-func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *Table[logProb] {
-	return newTable[logProb](n, total, alphabet)
+func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *Table[logprob] {
+	return newTable[logprob](n, total, alphabet)
 }
 
 func (t *Table[logProb]) SetLogProb(v uint64, symbols ...symbol) error {

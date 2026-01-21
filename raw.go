@@ -24,10 +24,10 @@ func (t *Table[uint64]) ToProb() *Table[prob] {
 	return pt
 }
 
-func (t *Table[uint64]) ToLogProb() *Table[logProb] {
+func (t *Table[uint64]) ToLogProb() *Table[logprob] {
 	lpt := NewLogProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {
-		lpt.freqs[i] = logProb(math.Log(float64(v)) - math.Log(float64(t.total)))
+		lpt.freqs[i] = logprob(math.Log(float64(v)) - math.Log(float64(t.total)))
 	}
 	return lpt
 }
