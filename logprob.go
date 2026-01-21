@@ -24,10 +24,10 @@ func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *Table[logprob] {
 	return newTable[logprob](n, total, alphabet)
 }
 
-func (t *Table[logProb]) SetLogProb(v uint64, symbols ...symbol) error {
-	return t.set(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
+func (t *Table[logProb]) SetLogProbFromCount(v uint64, symbols ...symbol) error {
+	return t.Set(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
 }
 
-func (t *Table[logProb]) MustSetLogProb(v uint64, symbols ...symbol) {
-	t.mustSet(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
+func (t *Table[logProb]) MustSetLogProbFromCount(v uint64, symbols ...symbol) {
+	t.MustSet(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
 }

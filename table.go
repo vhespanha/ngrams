@@ -47,7 +47,7 @@ func (t *Table[T]) MustAt(symbols ...symbol) *T {
 	return &t.freqs[t.idx(symbols)]
 }
 
-func (t *Table[T]) set(v T, symbols []symbol) error {
+func (t *Table[T]) Set(v T, symbols []symbol) error {
 	p, err := t.At(symbols...)
 	if err != nil {
 		return err
@@ -56,6 +56,6 @@ func (t *Table[T]) set(v T, symbols []symbol) error {
 	return nil
 }
 
-func (t *Table[T]) mustSet(v T, symbols []symbol) {
+func (t *Table[T]) MustSet(v T, symbols []symbol) {
 	*t.MustAt(symbols...) = v
 }

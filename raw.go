@@ -8,14 +8,6 @@ func NewRawTable(n int, total uint64, alphabet *Alphabet) *Table[uint64] {
 	return newTable[uint64](n, total, alphabet)
 }
 
-func (t *Table[uint64]) SetRaw(v uint64, symbols ...symbol) error {
-	return t.set(v, symbols)
-}
-
-func (t *Table[uint64]) MustSetRaw(v uint64, symbols ...symbol) {
-	t.mustSet(v, symbols)
-}
-
 func (t *Table[uint64]) ToProb() *Table[prob] {
 	pt := NewProbTable(t.n, t.total, t.alphabet)
 	for i, v := range t.freqs {

@@ -20,10 +20,10 @@ func NewProbTable(n int, total uint64, alphabet *Alphabet) *Table[prob] {
 	return newTable[prob](n, total, alphabet)
 }
 
-func (t *Table[prob]) SetProb(v uint64, symbols ...symbol) error {
-	return t.set(prob(v/t.total), symbols)
+func (t *Table[prob]) SetProbFromCount(v uint64, symbols ...symbol) error {
+	return t.Set(prob(v/t.total), symbols)
 }
 
-func (t *Table[prob]) MustSetProb(v uint64, symbols ...symbol) {
-	t.mustSet(prob(v/t.total), symbols)
+func (t *Table[prob]) MustSetProbFromCount(v uint64, symbols ...symbol) {
+	t.MustSet(prob(v/t.total), symbols)
 }
