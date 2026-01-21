@@ -2,7 +2,7 @@ package ngrams
 
 import "encoding/json"
 
-type auxTable[T freq] struct {
+type aux[T freq] struct {
 	N        int       `json:"n"`
 	Freqs    []T       `json:"freqs"`
 	Total    uint64    `json:"total"`
@@ -10,11 +10,11 @@ type auxTable[T freq] struct {
 }
 
 func (t *Table[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(auxTable[T]{t.n, t.freqs, t.total, t.alphabet})
+	return json.Marshal(aux[T]{t.n, t.freqs, t.total, t.alphabet})
 }
 
 func (t *Table[T]) UnmarshalJSON(data []byte) error {
-	aux := auxTable[T]{}
+	aux := aux[T]{}
 
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
