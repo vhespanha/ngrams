@@ -3,12 +3,19 @@ package ngrams
 import (
 	"encoding/json"
 	"math"
-	"strings"
 	"testing"
 )
 
 // Tests for JSON marshalling - only tests marshalling since unmarshalling
 // has limitations with the Alphabet struct's unexported fields.
+
+// jsonTableAux is used for parsing JSON output to verify structure
+type jsonTableAux struct {
+	N        int             `json:"n"`
+	Total    uint64          `json:"total"`
+	Freqs    json.RawMessage `json:"freqs"`
+	Alphabet json.RawMessage `json:"alphabet"`
+}
 
 func TestRawTableJSONMarshal(t *testing.T) {
 	a := NewLowercaseAlphabet()
@@ -22,19 +29,23 @@ func TestRawTableJSONMarshal(t *testing.T) {
 		t.Fatalf("JSON marshal error: %v", err)
 	}
 
-	// Verify JSON structure contains expected fields
-	jsonStr := string(data)
-	if !strings.Contains(jsonStr, `"n":2`) {
-		t.Error("JSON output missing n field")
+	// Parse JSON to verify structure
+	var parsed jsonTableAux
+	if err := json.Unmarshal(data, &parsed); err != nil {
+		t.Fatalf("Failed to parse JSON output: %v", err)
 	}
-	if !strings.Contains(jsonStr, `"total":1000`) {
-		t.Error("JSON output missing total field")
+
+	if parsed.N != 2 {
+		t.Errorf("JSON n = %d, want 2", parsed.N)
 	}
-	if !strings.Contains(jsonStr, `"freqs"`) {
-		t.Error("JSON output missing freqs field")
+	if parsed.Total != 1000 {
+		t.Errorf("JSON total = %d, want 1000", parsed.Total)
 	}
-	if !strings.Contains(jsonStr, `"alphabet"`) {
-		t.Error("JSON output missing alphabet field")
+	if parsed.Freqs == nil {
+		t.Error("JSON freqs is nil")
+	}
+	if parsed.Alphabet == nil {
+		t.Error("JSON alphabet is nil")
 	}
 }
 
@@ -49,16 +60,20 @@ func TestProbTableJSONMarshal(t *testing.T) {
 		t.Fatalf("JSON marshal error: %v", err)
 	}
 
-	// Verify JSON structure contains expected fields
-	jsonStr := string(data)
-	if !strings.Contains(jsonStr, `"n":1`) {
-		t.Error("JSON output missing n field")
+	// Parse JSON to verify structure
+	var parsed jsonTableAux
+	if err := json.Unmarshal(data, &parsed); err != nil {
+		t.Fatalf("Failed to parse JSON output: %v", err)
 	}
-	if !strings.Contains(jsonStr, `"total":100`) {
-		t.Error("JSON output missing total field")
+
+	if parsed.N != 1 {
+		t.Errorf("JSON n = %d, want 1", parsed.N)
 	}
-	if !strings.Contains(jsonStr, `"freqs"`) {
-		t.Error("JSON output missing freqs field")
+	if parsed.Total != 100 {
+		t.Errorf("JSON total = %d, want 100", parsed.Total)
+	}
+	if parsed.Freqs == nil {
+		t.Error("JSON freqs is nil")
 	}
 }
 
@@ -73,11 +88,7 @@ func TestLogProbTableJSONMarshal(t *testing.T) {
 	// This is a known limitation of JSON encoding.
 	_, err := json.Marshal(lpt)
 	if err == nil {
-		t.Skip("Expected JSON marshal to fail with -Inf values, but it succeeded")
-	}
-	// Verify it's the expected error
-	if !strings.Contains(err.Error(), "-Inf") && !strings.Contains(err.Error(), "unsupported value") {
-		t.Errorf("Unexpected error: %v", err)
+		t.Fatalf("Expected JSON marshal to fail with -Inf values, but it succeeded")
 	}
 }
 
