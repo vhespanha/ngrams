@@ -1,33 +1,47 @@
 package ngrams
 
 import (
+	"fmt"
 	"math"
 )
 
-// func isNotPositive[T ~float64](v T) bool {
-// 	f := float64(v)
-// 	return !math.IsNaN(f) && f <= 0
-// }
+type (
+	logprob      float64
+	LogProbTable struct {
+		*table[logprob]
+	}
+)
 
-type logprob float64
+var logProbZeroValue = logprob(math.Inf(-1))
 
-// var errNotLogProb = "type %T should not be positive"
+func (lp logprob) min() logprob   { return logProbZeroValue }
+func (lp logprob) max() logprob   { return 0 }
+func (lp logprob) validate() bool { return !math.IsNaN(float64(lp)) && lp <= lp.max() }
 
-// func (l logProb) validate() error {
-// 	if !isNotPositive(l) {
-// 		return fmt.Errorf(errNotLogProb, l)
-// 	}
-// 	return nil
-// }
-
-func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *Table[logprob] {
-	return newTable[logprob](n, total, alphabet)
+func newLogProb(v, total uint64) logprob {
+	return logprob(math.Log(float64(v)) - math.Log(float64(total)))
 }
 
-func (t *Table[logProb]) SetLogProbFromCount(v uint64, symbols ...symbol) error {
-	return t.Set(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
+func NewLogProbTable(n int, total uint64, alphabet *Alphabet) *LogProbTable {
+	t := newTable[logprob](n, total, alphabet)
+	for i := range t.freqs {
+		t.freqs[i] = logProbZeroValue
+	}
+	return &LogProbTable{t}
 }
 
-func (t *Table[logProb]) MustSetLogProbFromCount(v uint64, symbols ...symbol) {
-	t.MustSet(logProb(math.Log(float64(v))-math.Log(float64(t.total))), symbols)
+func (lpt *LogProbTable) SetLogProbFromCount(v uint64, symbols ...symbol) error {
+	lp := newLogProb(v, lpt.total)
+	if !lp.validate() {
+		return fmt.Errorf("%T should be [%g,%g], is %g", lp, lp.min(), lp.max(), lp)
+	}
+	return lpt.Set(lp, symbols...)
+}
+
+func (lpt *LogProbTable) MustSetLogProbFromCount(v uint64, symbols ...symbol) {
+	lp := newLogProb(v, lpt.total)
+	if !lp.validate() {
+		panic("operation generated invalid log probability")
+	}
+	lpt.MustSet(lp, symbols...)
 }

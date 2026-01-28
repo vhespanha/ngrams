@@ -9,11 +9,11 @@ type aux[T freq] struct {
 	Alphabet *Alphabet `json:"alphabet"`
 }
 
-func (t *Table[T]) MarshalJSON() ([]byte, error) {
+func (t *table[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(aux[T]{t.n, t.freqs, t.total, t.alphabet})
 }
 
-func (t *Table[T]) UnmarshalJSON(data []byte) error {
+func (t *table[T]) UnmarshalJSON(data []byte) error {
 	aux := aux[T]{}
 
 	if err := json.Unmarshal(data, &aux); err != nil {

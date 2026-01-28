@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 )
 
-func (t *Table[T]) GobEncode() ([]byte, error) {
+func (t *table[T]) GobEncode() ([]byte, error) {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 
@@ -25,7 +25,7 @@ func (t *Table[T]) GobEncode() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func (t *Table[T]) GobDecode(data []byte) error {
+func (t *table[T]) GobDecode(data []byte) error {
 	buf := bytes.NewBuffer(data)
 	dec := gob.NewDecoder(buf)
 

@@ -1,25 +1,27 @@
 package ngrams
 
-import (
-	"math"
+type (
+	RawTable struct {
+		*table[uint64]
+	}
 )
 
-func NewRawTable(n int, total uint64, alphabet *Alphabet) *Table[uint64] {
-	return newTable[uint64](n, total, alphabet)
+func NewRawTable(n int, total uint64, alphabet *Alphabet) *RawTable {
+	return &RawTable{newTable[uint64](n, total, alphabet)}
 }
 
-func (t *Table[uint64]) ToProb() *Table[prob] {
-	pt := NewProbTable(t.n, t.total, t.alphabet)
-	for i, v := range t.freqs {
-		pt.freqs[i] = prob(float64(v) / float64(t.total))
+func (rt *RawTable) ToProb() *ProbTable {
+	pt := NewProbTable(rt.n, rt.total, rt.alphabet)
+	for i, v := range rt.freqs {
+		pt.freqs[i] = prob(float64(v) / float64(rt.total))
 	}
 	return pt
 }
 
-func (t *Table[uint64]) ToLogProb() *Table[logprob] {
-	lpt := NewLogProbTable(t.n, t.total, t.alphabet)
-	for i, v := range t.freqs {
-		lpt.freqs[i] = logprob(math.Log(float64(v)) - math.Log(float64(t.total)))
+func (rt *RawTable) ToLogProb() *LogProbTable {
+	lpt := NewLogProbTable(rt.n, rt.total, rt.alphabet)
+	for i, v := range rt.freqs {
+		lpt.freqs[i] = newLogProb(v, rt.total)
 	}
 	return lpt
 }

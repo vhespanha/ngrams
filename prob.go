@@ -1,29 +1,34 @@
 package ngrams
 
-// func isFactor[T ~float64](v T) bool {
-// 	f := float64(v)
-// 	return f >= 0 && f <= 1
-// }
+import "fmt"
 
-type prob float64
+type (
+	prob      float64
+	ProbTable struct {
+		*table[prob]
+	}
+)
 
-// var errNotProb = "type %T must be within [0, 1]"
+func (p prob) min() prob      { return 0 }
+func (p prob) max() prob      { return 1 }
+func (p prob) validate() bool { return p >= p.min() && p <= p.max() }
 
-// func (p prob) validate() error {
-// 	if !isFactor(p) {
-// 		return fmt.Errorf(errNotProb, p)
-// 	}
-// 	return nil
-// }
-
-func NewProbTable(n int, total uint64, alphabet *Alphabet) *Table[prob] {
-	return newTable[prob](n, total, alphabet)
+func NewProbTable(n int, total uint64, alphabet *Alphabet) *ProbTable {
+	return &ProbTable{newTable[prob](n, total, alphabet)}
 }
 
-func (t *Table[prob]) SetProbFromCount(v uint64, symbols ...symbol) error {
-	return t.Set(prob(v/t.total), symbols)
+func (pt *ProbTable) SetProbFromCount(v uint64, symbols ...symbol) error {
+	p := prob(float64(v) / float64(pt.total))
+	if !p.validate() {
+		return fmt.Errorf("%T should be [%g,%g], is %g", p, p.min(), p.max(), p)
+	}
+	return pt.Set(p, symbols...)
 }
 
-func (t *Table[prob]) MustSetProbFromCount(v uint64, symbols ...symbol) {
-	t.MustSet(prob(v/t.total), symbols)
+func (pt *ProbTable) MustSetProbFromCount(v uint64, symbols ...symbol) {
+	p := prob(float64(v) / float64(pt.total))
+	if !p.validate() {
+		panic("operation resulted in invalid prob")
+	}
+	pt.MustSet(p, symbols...)
 }

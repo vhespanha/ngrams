@@ -64,7 +64,7 @@ func (a *Alphabet) SymbolsFromString(s string) ([]symbol, error) {
 		if !ok {
 			return nil, fmt.Errorf("invalid symbol %q", s[i])
 		}
-		symbols = append(symbols, symbol)
+		symbols[i] = symbol
 	}
 	return symbols, nil
 }
